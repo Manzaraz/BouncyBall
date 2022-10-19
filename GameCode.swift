@@ -47,6 +47,7 @@ fileprivate func setupBall() {
     scene.add(ball) // agrega el ball a la escena
     ball.hasPhysics = true // La propiedad hasPhysics participa en la simulación de la física del motor del juego
     ball.fillColor = .blue // Personalizo el color de nuestra pelota con la propiedad fillColor
+    ball.onCollision = ballCollided(with:)
 }
 
 fileprivate func setupBarrier() {
@@ -72,7 +73,15 @@ func setupTarget() {
     target.fillColor = .yellow
     
     scene.add(target)
+    target.name = "target"
 }
+
+// Maneja las colisiones entre la bola y los objetos
+func ballCollided(with otherShape: Shape) {
+    if otherShape.name != "target" {return}
+    otherShape.fillColor = .green
+}
+
 
 func setup() {
     scene.backgroundColor = .darkGray

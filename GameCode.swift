@@ -48,6 +48,8 @@ fileprivate func setupBall() {
     ball.hasPhysics = true // La propiedad hasPhysics participa en la simulación de la física del motor del juego
     ball.fillColor = .blue // Personalizo el color de nuestra pelota con la propiedad fillColor
     ball.onCollision = ballCollided(with:)
+    
+    ball.isDraggable = false // para e vitar que el usuario pueda arrastrar la pelota
 }
 
 fileprivate func setupBarrier() {
@@ -63,6 +65,8 @@ fileprivate func setupFunnel() {
     scene.add(funnel)
     funnel.onTapped = dropBall // La propiedad onTapped es una función en donde la funcion dropBall dejará caer la pelota
     funnel.fillColor = .lightGray
+    
+    funnel.isDraggable = false // con esto e vito que el usuario pueda arrastar el embudo
 }
 
 func setupTarget() {
@@ -100,5 +104,7 @@ func setup() {
 // Deja caer la pelota al moverla a la posición del embudo.
 func dropBall() {
     ball.position = funnel.position
+    
+    ball.stopAllMotion() // para detener la pelota que se escapa
 }
 

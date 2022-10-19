@@ -23,6 +23,15 @@ let barrierPoints = [
 
 let barrier = PolygonShape(points: barrierPoints)
 
+// Agregar un embudo
+let funnelPoints = [
+    Point(x: 0, y: 50),
+    Point(x: 80, y: 50),
+    Point(x: 60, y: 0),
+    Point(x: 20, y: 0)
+]
+let funnel = PolygonShape(points: funnelPoints)
+
 func setup() {
 //    /// Agregar un obstáculo a la escena.
 //    barrier.position = Point(x: 200, y: 150)
@@ -39,4 +48,15 @@ func setup() {
     scene.add(barrier)
     barrier.isImmobile = true
     
+    // Agrega un embudo a la escena
+    funnel.position = Point(x: 200, y: scene.height - 25)
+    scene.add(funnel)
+
+    // La propiedad onTapped es una función en donde la funcion dropBall dejará caer la pelota 
+    funnel.onTapped = dropBall
+}
+
+// Deja caer la pelota al moverla a la posición del embudo.
+func dropBall() {
+    circle.position = funnel.position
 }

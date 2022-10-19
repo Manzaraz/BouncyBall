@@ -32,6 +32,15 @@ let funnelPoints = [
 ]
 let funnel = PolygonShape(points: funnelPoints)
 
+// Agregar un objetivo
+let targetPoints = [
+    Point(x: 10, y: 0),
+    Point(x: 0, y: 10),
+    Point(x: 10, y: 20),
+    Point(x: 20, y: 10)
+]
+let target = PolygonShape(points: targetPoints)
+
 
 fileprivate func setupBall() {
     ball.position = Point(x: 250, y: 400)
@@ -49,14 +58,24 @@ fileprivate func setupBarrier() {
 }
 
 fileprivate func setupFunnel() {
-    // Agrega un embudo a la escena
     funnel.position = Point(x: 200, y: scene.height - 25)
     scene.add(funnel)
     funnel.onTapped = dropBall // La propiedad onTapped es una función en donde la funcion dropBall dejará caer la pelota
-    funnel.fillColor = .darkGray
+    funnel.fillColor = .lightGray
+}
+
+func setupTarget() {
+    target.position = Point(x: 200, y: 200)
+    target.hasPhysics = true
+    target.isImmobile = true
+    target.isImpermeable = false
+    target.fillColor = .yellow
+    
+    scene.add(target)
 }
 
 func setup() {
+    scene.backgroundColor = .darkGray
     setupBall()
     
     /// Agregar un obstáculo a la escena.
@@ -64,9 +83,13 @@ func setup() {
 
     // Agrega un embudo a la escena
     setupFunnel()
+    
+    // Agrego un objetivo a la escena
+    setupTarget()
 }
 
 // Deja caer la pelota al moverla a la posición del embudo.
 func dropBall() {
     ball.position = funnel.position
 }
+

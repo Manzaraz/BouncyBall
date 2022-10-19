@@ -50,6 +50,10 @@ fileprivate func setupBall() {
     ball.onCollision = ballCollided(with:)
     
     ball.isDraggable = false // para e vitar que el usuario pueda arrastrar la pelota
+    
+    scene.trackShape(ball)
+    ball.onExitedScene = ballExitedScene
+    ball.onTapped = resetGame
 }
 
 fileprivate func setupBarrier() {
@@ -99,6 +103,8 @@ func setup() {
     
     // Agrego un objetivo a la escena
     setupTarget()
+    
+    resetGame() // para que el juego se inicie sin la pelota en la pantalla 
 }
 
 // Deja caer la pelota al moverla a la posición del embudo.
@@ -106,5 +112,16 @@ func dropBall() {
     ball.position = funnel.position
     
     ball.stopAllMotion() // para detener la pelota que se escapa
+    barrier.isDraggable = false
 }
 
+func ballExitedScene() {
+    barrier.isDraggable = true
+}
+
+
+// Reestablese el juego al mover la pelota por debajo de la escena
+// esto desbloqueará los obstáculos
+func resetGame() {
+    ball.position = Point(x: 0, y: -80)
+}

@@ -10,7 +10,7 @@ for example if statements and for loops, at the top level; they have to be writt
 of a function.
 */
 
-let circle = OvalShape(width: 150, height: 150)
+let ball = OvalShape(width: 40, height: 40)
 let barrierWidth = 300.0
 let barrierHeight = 25.0
 
@@ -32,31 +32,41 @@ let funnelPoints = [
 ]
 let funnel = PolygonShape(points: funnelPoints)
 
-func setup() {
-//    /// Agregar un obstáculo a la escena.
-//    barrier.position = Point(x: 200, y: 150)
-    /// Define la asignación de la posición de nuestra "bola" dentro de la pantalla a través de las coordenadas x e y
-    circle.position = Point(x: 250, y: 400)
-    scene.add(circle) // agrega el circle a la escena
-    
-    /// La propiedad hasPhysics participa en la simulación de la física del motor del juego
-    circle.hasPhysics = true
-    
-    /// Agregar un obstáculo a la escena.
+
+fileprivate func setupBall() {
+    ball.position = Point(x: 250, y: 400)
+    scene.add(ball) // agrega el ball a la escena
+    ball.hasPhysics = true // La propiedad hasPhysics participa en la simulación de la física del motor del juego
+    ball.fillColor = .blue // Personalizo el color de nuestra pelota con la propiedad fillColor
+}
+
+fileprivate func setupBarrier() {
     barrier.position = Point(x: 200, y: 150)
     barrier.hasPhysics = true
     scene.add(barrier)
     barrier.isImmobile = true
-    
+    barrier.fillColor = .brown
+}
+
+fileprivate func setupFunnel() {
     // Agrega un embudo a la escena
     funnel.position = Point(x: 200, y: scene.height - 25)
     scene.add(funnel)
+    funnel.onTapped = dropBall // La propiedad onTapped es una función en donde la funcion dropBall dejará caer la pelota
+    funnel.fillColor = .darkGray
+}
 
-    // La propiedad onTapped es una función en donde la funcion dropBall dejará caer la pelota 
-    funnel.onTapped = dropBall
+func setup() {
+    setupBall()
+    
+    /// Agregar un obstáculo a la escena.
+    setupBarrier()
+
+    // Agrega un embudo a la escena
+    setupFunnel()
 }
 
 // Deja caer la pelota al moverla a la posición del embudo.
 func dropBall() {
-    circle.position = funnel.position
+    ball.position = funnel.position
 }

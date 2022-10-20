@@ -11,6 +11,7 @@ of a function.
 */
 
 let ball = OvalShape(width: 40, height: 40)
+/* /// pronto eliminaría esta parte del código porque la reemplazo por el arreglo barriers
 let barrierWidth = 300.0
 let barrierHeight = 25.0
 
@@ -22,6 +23,10 @@ let barrierPoints = [
 ]
 
 let barrier = PolygonShape(points: barrierPoints)
+*/
+
+var barriers: [Shape] = [] // refactorizamos la segunda ronda agregando un arreglo para almacenar los obstaculos
+var targets: [Shape] = []
 
 // Agregar un embudo
 let funnelPoints = [
@@ -41,7 +46,6 @@ let targetPoints = [
 ]
 let target = PolygonShape(points: targetPoints)
 
-
 fileprivate func setupBall() {
     ball.position = Point(x: 250, y: 400)
     scene.add(ball) // agrega el ball a la escena
@@ -54,14 +58,30 @@ fileprivate func setupBall() {
     scene.trackShape(ball)
     ball.onExitedScene = ballExitedScene
     ball.onTapped = resetGame
+    ball.bounciness = 0.6
 }
 
-fileprivate func setupBarrier() {
-    barrier.position = Point(x: 200, y: 150)
+// he modificado el nombre de la funcion setupBarrier() -> addBarrier()
+fileprivate func addBarrier(at position: Point, width: Double, height: Double, angle: Double) {
+    // A continuación agrego los parámetros a la función para que pueda especificar el ancho, altura, la posición y el ángulo
+    let barrierPoints = [
+        Point(x: 0, y: 0),
+        Point(x: 0, y: height),
+        Point(x: width, y: height),
+        Point(x: width, y: 0)
+    ]
+    
+    let barrier = PolygonShape(points: barrierPoints)
+    
+    barriers.append(barrier)
+    
+    // Código existente de setupBarrier() a continuación con actualizaciones
+    barrier.position = position
     barrier.hasPhysics = true
     scene.add(barrier)
     barrier.isImmobile = true
     barrier.fillColor = .brown
+    barrier.angle = angle
 }
 
 fileprivate func setupFunnel() {
@@ -70,7 +90,7 @@ fileprivate func setupFunnel() {
     funnel.onTapped = dropBall // La propiedad onTapped es una función en donde la funcion dropBall dejará caer la pelota
     funnel.fillColor = .lightGray
     
-    funnel.isDraggable = false // con esto e vito que el usuario pueda arrastar el embudo
+    funnel.isDraggable = false // con esto evito que el usuario pueda arrastar el embudo
 }
 
 func setupTarget() {
@@ -82,6 +102,9 @@ func setupTarget() {
     
     scene.add(target)
     target.name = "target"
+    
+    target.isDraggable = true
+    
 }
 
 // Maneja las colisiones entre la bola y los objetos
@@ -96,7 +119,7 @@ func setup() {
     setupBall()
     
     /// Agregar un obstáculo a la escena.
-    setupBarrier()
+    addBarrier(at: Point(x: 200, y: 150), width: 80, height: 25, angle: 0.1)
 
     // Agrega un embudo a la escena
     setupFunnel()
@@ -104,7 +127,9 @@ func setup() {
     // Agrego un objetivo a la escena
     setupTarget()
     
-    resetGame() // para que el juego se inicie sin la pelota en la pantalla 
+    resetGame() // para que el juego se inicie sin la pelota en la pantalla
+    
+    scene.onShapeMoved = printPosition(of:)
 }
 
 // Deja caer la pelota al moverla a la posición del embudo.
@@ -112,11 +137,17 @@ func dropBall() {
     ball.position = funnel.position
     
     ball.stopAllMotion() // para detener la pelota que se escapa
-    barrier.isDraggable = false
+    // barrier es ahora un elemento de barriers, por cuanto lo recorro con un ciclo y agrego a cada obstaculo la propiedad de false
+    for barrier in barriers {
+        barrier.isDraggable = false
+    }
 }
 
 func ballExitedScene() {
-    barrier.isDraggable = true
+    for barrier in barriers {
+        barrier.isDraggable = true
+    }
+
 }
 
 
@@ -124,4 +155,8 @@ func ballExitedScene() {
 // esto desbloqueará los obstáculos
 func resetGame() {
     ball.position = Point(x: 0, y: -80)
+}
+
+func printPosition(of shape: Shape)  {
+    print(shape.position)
 }

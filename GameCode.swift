@@ -10,20 +10,9 @@ for example if statements and for loops, at the top level; they have to be writt
 of a function.
 */
 
+
+
 let ball = OvalShape(width: 40, height: 40)
-/* /// pronto eliminaría esta parte del código porque la reemplazo por el arreglo barriers
-let barrierWidth = 300.0
-let barrierHeight = 25.0
-
-let barrierPoints = [
-    Point(x: 0, y: 0),
-    Point(x: 0, y: barrierHeight),
-    Point(x: barrierWidth, y: barrierHeight),
-    Point(x: barrierWidth, y: 0)
-]
-
-let barrier = PolygonShape(points: barrierPoints)
-*/
 
 var barriers: [Shape] = [] // refactorizamos la segunda ronda agregando un arreglo para almacenar los obstaculos
 var targets: [Shape] = []
@@ -37,14 +26,7 @@ let funnelPoints = [
 ]
 let funnel = PolygonShape(points: funnelPoints)
 
-// Agregar un objetivo
-let targetPoints = [
-    Point(x: 10, y: 0),
-    Point(x: 0, y: 10),
-    Point(x: 10, y: 20),
-    Point(x: 20, y: 10)
-]
-let target = PolygonShape(points: targetPoints)
+
 
 fileprivate func setupBall() {
     ball.position = Point(x: 250, y: 400)
@@ -75,7 +57,7 @@ fileprivate func addBarrier(at position: Point, width: Double, height: Double, a
     
     barriers.append(barrier)
     
-    // Código existente de setupBarrier() a continuación con actualizaciones
+    // Código existente de setupBarrier() a continuación con actualizaciones de position y angle
     barrier.position = position
     barrier.hasPhysics = true
     scene.add(barrier)
@@ -93,8 +75,20 @@ fileprivate func setupFunnel() {
     funnel.isDraggable = false // con esto evito que el usuario pueda arrastar el embudo
 }
 
-func setupTarget() {
-    target.position = Point(x: 200, y: 200)
+// ahora la función cambia de nombre setupTarget() -> addTarget()
+func addTarget(at position: Point) {
+    let targetPoints = [
+        Point(x: 10, y: 0),
+        Point(x: 0, y: 10),
+        Point(x: 10, y: 20),
+        Point(x: 20, y: 10)
+    ]
+    let target = PolygonShape(points: targetPoints)
+    
+    targets.append(target)
+
+    // Código existente a la función setupTarget()
+    target.position = position
     target.hasPhysics = true
     target.isImmobile = true
     target.isImpermeable = false
@@ -123,9 +117,18 @@ func setup() {
 
     // Agrega un embudo a la escena
     setupFunnel()
-    
+    // Agrego un obstáculo a la escena
+    addBarrier(at: Point(x: 200, y: 150), width: 80, height: 25, angle: 0.1)
+    addBarrier(at: Point(x: 100, y: 150), width: 30, height: 15, angle: -0.2)
+    addBarrier(at: Point(x: 300, y: 150), width: 100, height: 25, angle: 0.03)
     // Agrego un objetivo a la escena
-    setupTarget()
+//    addTarget(at: Point(x: 150, y: 400))
+    addTarget(at: Point(x: 133, y: 614))
+    addTarget(at: Point(x: 111, y: 474))
+    addTarget(at: Point(x: 256, y: 280))
+    addTarget(at: Point(x: 151, y: 242))
+    addTarget(at: Point(x: 165, y: 40))
+
     
     resetGame() // para que el juego se inicie sin la pelota en la pantalla
     
@@ -147,9 +150,7 @@ func ballExitedScene() {
     for barrier in barriers {
         barrier.isDraggable = true
     }
-
 }
-
 
 // Reestablese el juego al mover la pelota por debajo de la escena
 // esto desbloqueará los obstáculos
@@ -160,3 +161,4 @@ func resetGame() {
 func printPosition(of shape: Shape)  {
     print(shape.position)
 }
+

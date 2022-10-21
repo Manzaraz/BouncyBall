@@ -24,9 +24,8 @@ let funnelPoints = [
     Point(x: 60, y: 0),
     Point(x: 20, y: 0)
 ]
+
 let funnel = PolygonShape(points: funnelPoints)
-
-
 
 fileprivate func setupBall() {
     ball.position = Point(x: 250, y: 400)
@@ -98,7 +97,6 @@ func addTarget(at position: Point) {
     target.name = "target"
     
     target.isDraggable = true
-    
 }
 
 // Maneja las colisiones entre la bola y los objetos
@@ -144,12 +142,29 @@ func dropBall() {
     for barrier in barriers {
         barrier.isDraggable = false
     }
+    for target in targets {
+        target.fillColor = .yellow
+    }
 }
 
 func ballExitedScene() {
     for barrier in barriers {
         barrier.isDraggable = true
     }
+    var hitTargets = 0
+    for target in targets {
+        if target.fillColor == .green {
+            hitTargets += 1
+        }
+    }
+    if hitTargets == targets.count {
+//        print("¡Ganaste!")
+        scene.presentAlert(text: "🥳 ¡Ganaste! 🎉", completion: alertDismissed)
+    }
+}
+
+func alertDismissed() {
+    
 }
 
 // Reestablese el juego al mover la pelota por debajo de la escena

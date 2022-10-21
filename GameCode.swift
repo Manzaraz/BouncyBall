@@ -162,9 +162,8 @@ func ballExitedScene() {
         scene.presentAlert(text: "🥳 ¡Ganaste! 🎉", completion: alertDismissed)
     }
 }
-
 func alertDismissed() {
-    
+
 }
 
 // Reestablese el juego al mover la pelota por debajo de la escena

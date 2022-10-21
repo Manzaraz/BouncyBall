@@ -10,8 +10,6 @@ for example if statements and for loops, at the top level; they have to be writt
 of a function.
 */
 
-
-
 let ball = OvalShape(width: 40, height: 40)
 
 var barriers: [Shape] = [] // refactorizamos la segunda ronda agregando un arreglo para almacenar los obstaculos
@@ -105,7 +103,6 @@ func ballCollided(with otherShape: Shape) {
     otherShape.fillColor = .green
 }
 
-
 func setup() {
     scene.backgroundColor = .darkGray
     setupBall()
@@ -115,18 +112,17 @@ func setup() {
 
     // Agrega un embudo a la escena
     setupFunnel()
+    
     // Agrego un obstáculo a la escena
     addBarrier(at: Point(x: 200, y: 150), width: 80, height: 25, angle: 0.1)
     addBarrier(at: Point(x: 100, y: 150), width: 30, height: 15, angle: -0.2)
     addBarrier(at: Point(x: 300, y: 150), width: 100, height: 25, angle: 0.03)
     // Agrego un objetivo a la escena
-//    addTarget(at: Point(x: 150, y: 400))
     addTarget(at: Point(x: 133, y: 614))
     addTarget(at: Point(x: 111, y: 474))
     addTarget(at: Point(x: 256, y: 280))
     addTarget(at: Point(x: 151, y: 242))
     addTarget(at: Point(x: 165, y: 40))
-
     
     resetGame() // para que el juego se inicie sin la pelota en la pantalla
     
@@ -158,13 +154,10 @@ func ballExitedScene() {
         }
     }
     if hitTargets == targets.count {
-//        print("¡Ganaste!")
         scene.presentAlert(text: "🥳 ¡Ganaste! 🎉", completion: alertDismissed)
     }
 }
-func alertDismissed() {
-
-}
+func alertDismissed() {}
 
 // Reestablese el juego al mover la pelota por debajo de la escena
 // esto desbloqueará los obstáculos
